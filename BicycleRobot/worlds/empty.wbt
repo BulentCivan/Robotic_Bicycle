@@ -1,0 +1,230 @@
+#VRML_SIM R2022a utf8
+WorldInfo {
+}
+Viewpoint {
+  fieldOfView 0.5
+  orientation 0.20090249067921448 0.11525424933807131 -0.9728076106036619 2.1685496850378474
+  position 1.4160672198851707 2.4252329185423953 2.0453763729098533
+}
+TexturedBackground {
+  texture "noon_building_overcast"
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 15 15
+  floorTileSize 0.25 0.25
+  floorAppearance Parquetry {
+    type "light strip"
+  }
+}
+DEF robot Robot {
+  translation 0 0 -0.11
+  rotation 0 1 0 0
+  children [
+    DEF body Transform {
+      translation 0 0 0.2
+      rotation 0 1 0 1.5708
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 1 0 0
+            roughness 1
+            metalness 0
+          }
+          geometry Cylinder {
+            height 0.2
+            radius 0.02
+          }
+        }
+      ]
+    }
+    DEF back HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 1 0
+        anchor -0.1 0 0.2
+      }
+      device [
+        RotationalMotor {
+          name "motor_shaft"
+        }
+      ]
+      endPoint Solid {
+        translation -0.1 0 0.2
+        rotation 1 7.850455178238667e-17 -7.850455178238667e-17 1.5707981394753774
+        children [
+          Solid {
+            translation 0 0 -0.1
+            children [
+              Shape {
+                appearance PBRAppearance {
+                  roughness 1
+                  metalness 0
+                }
+                geometry Cylinder {
+                  height 0.02
+                  radius 0.07
+                }
+              }
+            ]
+            name "solid(1)"
+            boundingObject Cylinder {
+              height 0.02
+              radius 0.07
+            }
+            physics Physics {
+            }
+          }
+          Solid {
+            translation 0 0 0.1
+            children [
+              Shape {
+                appearance PBRAppearance {
+                  roughness 1
+                  metalness 0
+                }
+                geometry Cylinder {
+                  height 0.02
+                  radius 0.07
+                }
+              }
+            ]
+            boundingObject Cylinder {
+              height 0.02
+              radius 0.07
+            }
+            physics Physics {
+            }
+          }
+          DEF shaft Shape {
+            appearance PBRAppearance {
+              roughness 1
+              metalness 0
+            }
+            geometry Cylinder {
+              height 0.18
+              radius 0.02
+            }
+          }
+        ]
+        boundingObject USE shaft
+        physics DEF shaft_phy Physics {
+        }
+      }
+    }
+    DEF front HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 0 1
+        anchor 0.1 0 0.28
+      }
+      device [
+        RotationalMotor {
+          name "motor_steering"
+        }
+        PositionSensor {
+          name "ps_front1"
+        }
+      ]
+      endPoint Solid {
+        translation 0.1 0 0.28
+        children [
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              axis 0 1 0
+              anchor 0 0 -0.1
+            }
+            device [
+              RotationalMotor {
+                name "motor_front"
+              }
+            ]
+            endPoint Solid {
+              translation 2.069533187314241e-06 1.76645452861909e-05 -0.09998440004110273
+              rotation 0.9971505313011993 0.0533422749270955 -0.05334247492700143 1.5736499999999998
+              children [
+                DEF front_wheel Shape {
+                  appearance PBRAppearance {
+                    roughness 1
+                    metalness 0
+                  }
+                  geometry Cylinder {
+                    height 0.01
+                    radius 0.07
+                  }
+                }
+              ]
+              name "solid1"
+              boundingObject USE front_wheel
+              physics Physics {
+              }
+            }
+          }
+          Solid {
+            translation 0 0 0.1
+            rotation 0 0 -1 1.5708
+            children [
+              Shape {
+                appearance PBRAppearance {
+                  roughness 1
+                  metalness 0
+                }
+                geometry Cylinder {
+                  height 0.02
+                  radius 0.07
+                }
+              }
+            ]
+            name "solid(1)"
+            boundingObject Cylinder {
+              height 0.02
+              radius 0.07
+            }
+            physics Physics {
+            }
+          }
+          DEF steering_shaft Shape {
+            appearance PBRAppearance {
+              roughness 1
+              metalness 0
+            }
+            geometry Cylinder {
+              height 0.18
+              radius 0.02
+            }
+          }
+        ]
+        name "solid(1)"
+        boundingObject USE steering_shaft
+        physics Physics {
+        }
+      }
+    }
+  ]
+  boundingObject USE body
+  physics Physics {
+  }
+  controller "my_controller"
+  supervisor TRUE
+}
+DEF TARGET Robot {
+  translation -5 -5 0
+  children [
+    Solid {
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.4 0.6 0.2
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.3 0.3 0.1
+          }
+        }
+      ]
+      name "target_s"
+    }
+  ]
+  name "TARGET"
+  supervisor TRUE
+}
